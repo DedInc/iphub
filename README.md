@@ -7,7 +7,7 @@
 ```python
 from iphub import IPHub
 
-iphub = IPHub('rzpsbbdiwg7@1secmail.com', 'rzpsbbdiwg7@1secmail.com')
+iphub = IPHub('login@gmail.com', 'password123')
 result = iphub.check_ip('127.0.0.1')
 print(result)
 ```
