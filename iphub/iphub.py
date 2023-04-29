@@ -21,35 +21,31 @@ class IPHub:
     def get_keys(self):
         keys = []
         r = self.session.get('https://iphub.info/account')
+        self.ctoken = r.text.split('token" content="')[1].split('"')[0]
         dem = r.text.split('/apiKey/')
         for line in dem:
             try:
                 if dem.index(line) != 0:
-                    keys.append(line.split('"')[0])
+                    keys.append(line.split('"')[0])                
             except:
-                self.regenerate_key()
-                return self.get_keys()
-        return keys
+                pass
+        if len(keys) == 0:
+            self.generate_key()
+            return self.get_keys()
+        return keys 
 
     def get_key(self, id):
-        try:
-            return 'MT' + self.session.get(f'https://iphub.info/apiKey/{id}').text.split('"MT')[1].split('"')[0]
-        except:
-            return None
+        return self.session.get(f'https://iphub.info/apiKey/{id}').text.split('readonly value="')[1].split('"')[0]
 
     def regenerate_key(self, id):
-        try:
-            self.session.post(f'https://iphub.info/apiKey/regenerateApiKey/{id}', data={'_token': self.ctoken})
-            return self.get_key(id)
-        except:
-            return None
+        r = self.session.post(f'https://iphub.info/apiKey/regenerateApiKey/{id}', data={'_token': self.ctoken})            
+        self.ctoken = r.text.split('token" content="')[1].split('"')[0]
+        return self.get_key(id)
 
     def generate_key(self):
-        try:
-            self.session.post('https://iphub.info/apiKey/newFree', data={'_token': self.ctoken})
-            return self.get_key(self.get_keys()[0])
-        except:
-            return None
+        r = self.session.post('https://iphub.info/apiKey/newFree', data={'_token': self.ctoken})
+        self.ctoken = r.text.split('token" content="')[1].split('"')[0]
+        return self.get_key(self.get_keys()[0])
 
     def check_ip(self, ip):
         r = get(url=f'http://v2.api.iphub.info/ip/{ip}', headers={'X-Key': self.api_key}).json()
