@@ -5,10 +5,9 @@
 <h1 align="center"> -How to use?- </h1>
 
 ```python
-import iphub
+from iphub import IPHub
 
-s = iphub.getSession('login', 'password') #Authirization
-key = iphub.generateKey(s) #Generate/Get key
-iphub.setKey(key) #Set key for use
-print(iphub.checkIP(s, '127.0.0.1')) #Check ip and print result (note: Auto regenerate key if expired)
+iphub = IPHub('rzpsbbdiwg7@1secmail.com', 'rzpsbbdiwg7@1secmail.com')
+result = iphub.check_ip('127.0.0.1')
+print(result)
 ```
